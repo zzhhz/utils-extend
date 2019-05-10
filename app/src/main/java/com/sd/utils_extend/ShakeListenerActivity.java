@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.sd.lib.utils.extend.FShakeListener;
+import com.zzh.lib.utils.extend.FShakeListener;
+
 
 public class ShakeListenerActivity extends AppCompatActivity
 {
