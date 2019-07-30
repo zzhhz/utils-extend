@@ -2,7 +2,7 @@ package com.zzh.lib.utils.extend;
 
 import android.animation.Animator;
 
-public class FVisibilityAnimatorHandler {
+public class HVisibilityAnimatorHandler {
     private Animator mShowAnimator;
     private Animator mHideAnimator;
 

@@ -5,14 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.zzh.lib.utils.extend.FContinueTrigger;
+import com.zzh.lib.utils.extend.HContinueTrigger;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private final FContinueTrigger mContinueTrigger = new FContinueTrigger(2);
+    private final HContinueTrigger mContinueTrigger = new HContinueTrigger(2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

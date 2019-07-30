@@ -3,8 +3,7 @@ package com.zzh.lib.utils.extend;
 import android.os.Handler;
 import android.os.Looper;
 
-public abstract class FDelayTask
-{
+public abstract class HDelayTask {
     private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
     private boolean mPost;
@@ -14,8 +13,7 @@ public abstract class FDelayTask
      *
      * @param delay (单位毫秒)
      */
-    public final synchronized void runDelay(long delay)
-    {
+    public final synchronized void runDelay(long delay) {
         if (delay < 0)
             delay = 0;
 
@@ -28,8 +26,7 @@ public abstract class FDelayTask
     /**
      * 立即在当前线程执行，如果有延迟任务会先移除延迟任务
      */
-    public final synchronized void runImmediately()
-    {
+    public final synchronized void runImmediately() {
         removeDelay();
         mRunnable.run();
     }
@@ -39,8 +36,7 @@ public abstract class FDelayTask
      *
      * @param delay (单位毫秒) 小于等于0-立即在当前线程执行，大于0-延迟执行
      */
-    public final void runDelayOrImmediately(long delay)
-    {
+    public final void runDelayOrImmediately(long delay) {
         if (delay > 0)
             runDelay(delay);
         else
@@ -52,11 +48,9 @@ public abstract class FDelayTask
      *
      * @return
      */
-    public final synchronized boolean removeDelay()
-    {
+    public final synchronized boolean removeDelay() {
         MAIN_HANDLER.removeCallbacks(mRunnable);
-        if (mPost)
-        {
+        if (mPost) {
             mPost = false;
             onRemove();
             return true;
@@ -64,27 +58,22 @@ public abstract class FDelayTask
         return false;
     }
 
-    private final Runnable mRunnable = new Runnable()
-    {
+    private final Runnable mRunnable = new Runnable() {
         @Override
-        public void run()
-        {
-            synchronized (FDelayTask.this)
-            {
+        public void run() {
+            synchronized (HDelayTask.this) {
                 mPost = false;
             }
 
-            FDelayTask.this.onRun();
+            HDelayTask.this.onRun();
         }
     };
 
     protected abstract void onRun();
 
-    protected void onPost(long delay)
-    {
+    protected void onPost(long delay) {
     }
 
-    protected void onRemove()
-    {
+    protected void onRemove() {
     }
 }

@@ -6,8 +6,7 @@ import android.os.Looper;
 /**
  * 重试帮助类
  */
-public abstract class FRetryWorker
-{
+public abstract class HRetryWorker {
     /**
      * 最大重试次数
      */
@@ -24,8 +23,7 @@ public abstract class FRetryWorker
 
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public FRetryWorker(int maxRetryCount)
-    {
+    public HRetryWorker(int maxRetryCount) {
         if (maxRetryCount <= 0)
             throw new IllegalArgumentException("maxRetryCount must > 0");
         mMaxRetryCount = maxRetryCount;
@@ -36,8 +34,7 @@ public abstract class FRetryWorker
      *
      * @return
      */
-    public final boolean isStarted()
-    {
+    public final boolean isStarted() {
         return mIsStarted;
     }
 
@@ -46,16 +43,14 @@ public abstract class FRetryWorker
      *
      * @return
      */
-    public final int getRetryCount()
-    {
+    public final int getRetryCount() {
         return mRetryCount;
     }
 
     /**
      * 开始重试
      */
-    public final synchronized void start()
-    {
+    public final synchronized void start() {
         if (mIsStarted)
             return;
 
@@ -70,8 +65,7 @@ public abstract class FRetryWorker
      *
      * @param delayMillis 延迟多少毫秒
      */
-    protected final synchronized void retry(long delayMillis)
-    {
+    protected final synchronized void retry(long delayMillis) {
         if (!mIsStarted)
             return;
 
@@ -82,13 +76,10 @@ public abstract class FRetryWorker
         mHandler.postDelayed(mRetryRunnable, delayMillis);
     }
 
-    private final Runnable mRetryRunnable = new Runnable()
-    {
+    private final Runnable mRetryRunnable = new Runnable() {
         @Override
-        public void run()
-        {
-            synchronized (FRetryWorker.this)
-            {
+        public void run() {
+            synchronized (HRetryWorker.this) {
                 if (!mIsStarted)
                     return;
 
@@ -106,10 +97,8 @@ public abstract class FRetryWorker
      *
      * @return true-达到最大次数
      */
-    protected final synchronized boolean isMaxRetry()
-    {
-        if (mRetryCount >= mMaxRetryCount)
-        {
+    protected final synchronized boolean isMaxRetry() {
+        if (mRetryCount >= mMaxRetryCount) {
             // 达到最大重试次数
             stop();
             onRetryMaxCount();
@@ -121,24 +110,20 @@ public abstract class FRetryWorker
     /**
      * 停止重试
      */
-    public final synchronized void stop()
-    {
+    public final synchronized void stop() {
         mHandler.removeCallbacks(mRetryRunnable);
         mRetryCount = 0;
         setStarted(false);
     }
 
-    private void setStarted(boolean started)
-    {
-        if (mIsStarted != started)
-        {
+    private void setStarted(boolean started) {
+        if (mIsStarted != started) {
             mIsStarted = started;
             onStateChanged(started);
         }
     }
 
-    protected void onStateChanged(boolean started)
-    {
+    protected void onStateChanged(boolean started) {
     }
 
     /**
@@ -149,7 +134,6 @@ public abstract class FRetryWorker
     /**
      * 达到最大重试次数
      */
-    protected void onRetryMaxCount()
-    {
+    protected void onRetryMaxCount() {
     }
 }

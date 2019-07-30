@@ -11,29 +11,24 @@ import android.net.NetworkInfo;
 /**
  * 需要用到网络的重试帮助类
  */
-public abstract class FNetRetryWorker extends FRetryWorker
-{
+public abstract class HNetRetryWorker extends HRetryWorker {
     private NetworkReceiver mNetworkReceiver;
 
-    public FNetRetryWorker(int maxRetryCount, Context context)
-    {
+    public HNetRetryWorker(int maxRetryCount, Context context) {
         super(maxRetryCount);
         mNetworkReceiver = new NetworkReceiver(context);
         mNetworkReceiver.register();
     }
 
     @Override
-    protected final void onRetry()
-    {
+    protected final void onRetry() {
         if (mNetworkReceiver == null)
             throw new RuntimeException("current instance has been destroyed");
 
         final NetworkInfo networkInfo = mNetworkReceiver.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-        {
+        if (networkInfo != null && networkInfo.isConnected()) {
             onRetryImpl();
-        } else
-        {
+        } else {
             onRetryWhenNetworkDisconnected();
         }
     }
@@ -41,8 +36,7 @@ public abstract class FNetRetryWorker extends FRetryWorker
     /**
      * 重试的时候网络不可用回调
      */
-    protected void onRetryWhenNetworkDisconnected()
-    {
+    protected void onRetryWhenNetworkDisconnected() {
     }
 
     /**
@@ -50,8 +44,7 @@ public abstract class FNetRetryWorker extends FRetryWorker
      *
      * @param networkInfo
      */
-    protected void onNetworkConnected(NetworkInfo networkInfo)
-    {
+    protected void onNetworkConnected(NetworkInfo networkInfo) {
         retry(0);
     }
 
@@ -63,53 +56,43 @@ public abstract class FNetRetryWorker extends FRetryWorker
     /**
      * 销毁
      */
-    public final synchronized void destroy()
-    {
+    public final synchronized void destroy() {
         stop();
-        if (mNetworkReceiver != null)
-        {
+        if (mNetworkReceiver != null) {
             mNetworkReceiver.unregister();
             mNetworkReceiver = null;
         }
     }
 
-    private final class NetworkReceiver extends BroadcastReceiver
-    {
+    private final class NetworkReceiver extends BroadcastReceiver {
         private final Context mContext;
 
-        public NetworkReceiver(Context context)
-        {
+        public NetworkReceiver(Context context) {
             mContext = context.getApplicationContext();
         }
 
         @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()))
-            {
+        public void onReceive(Context context, Intent intent) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                 final NetworkInfo networkInfo = getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isConnected())
-                {
+                if (networkInfo != null && networkInfo.isConnected()) {
                     onNetworkConnected(networkInfo);
                 }
             }
         }
 
-        public NetworkInfo getActiveNetworkInfo()
-        {
+        public NetworkInfo getActiveNetworkInfo() {
             final ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             return manager.getActiveNetworkInfo();
         }
 
-        public void register()
-        {
+        public void register() {
             final IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             mContext.registerReceiver(this, filter);
         }
 
-        public void unregister()
-        {
+        public void unregister() {
             mContext.unregisterReceiver(this);
         }
     }

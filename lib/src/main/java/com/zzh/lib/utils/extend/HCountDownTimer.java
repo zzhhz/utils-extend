@@ -5,8 +5,7 @@ import android.os.CountDownTimer;
 /**
  * 倒计时类
  */
-public abstract class FCountDownTimer
-{
+public abstract class HCountDownTimer {
     private CountDownTimer mTimer;
 
     /**
@@ -15,24 +14,19 @@ public abstract class FCountDownTimer
      * @param millisInFuture    总时长（毫秒）
      * @param countDownInterval 隔多久触发一次（毫秒）
      */
-    public synchronized void start(long millisInFuture, long countDownInterval)
-    {
+    public synchronized void start(long millisInFuture, long countDownInterval) {
         stop();
-        if (mTimer == null)
-        {
-            mTimer = new CountDownTimer(millisInFuture, countDownInterval)
-            {
+        if (mTimer == null) {
+            mTimer = new CountDownTimer(millisInFuture, countDownInterval) {
                 @Override
-                public void onTick(long millisUntilFinished)
-                {
-                    FCountDownTimer.this.onTick(millisUntilFinished);
+                public void onTick(long millisUntilFinished) {
+                    HCountDownTimer.this.onTick(millisUntilFinished);
                 }
 
                 @Override
-                public void onFinish()
-                {
+                public void onFinish() {
                     stop();
-                    FCountDownTimer.this.onFinish();
+                    HCountDownTimer.this.onFinish();
                 }
             };
             mTimer.start();
@@ -42,10 +36,8 @@ public abstract class FCountDownTimer
     /**
      * 停止倒计时
      */
-    public synchronized void stop()
-    {
-        if (mTimer != null)
-        {
+    public synchronized void stop() {
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
         }
@@ -56,8 +48,7 @@ public abstract class FCountDownTimer
      *
      * @return
      */
-    public synchronized boolean isStarted()
-    {
+    public synchronized boolean isStarted() {
         return mTimer != null;
     }
 
